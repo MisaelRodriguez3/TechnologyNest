@@ -1,0 +1,22 @@
+.button {
+    height: 35px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.button:hover {
+    transform: scale(1.05);
+}
+
+.auth {
+    background-color: var(--glaucous);
+    color: var(---white);
+    width: 100%;
+}
+
+.auth:hover{
+    background-color: var(--glaucous-dark);
+}

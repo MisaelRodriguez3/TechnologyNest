@@ -1,0 +1,14 @@
+venv/
+migrations/
+seeders/
+logs/*
+alembic.ini
+app.log
+
+__pycache__/
+*.py[cod]
+
+.pytest_cache/
+
+.env
+.venv

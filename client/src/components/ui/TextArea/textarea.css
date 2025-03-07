@@ -1,0 +1,10 @@
+.error-container {
+    min-height: 1.2rem; /* Espacio reservado para el mensaje */
+    font-size: 0.875rem; /* Tamaño de fuente adecuado */
+    color: red;
+    visibility: hidden; /* Oculta sin perder el espacio */
+}
+
+.active {
+    visibility: visible;
+}

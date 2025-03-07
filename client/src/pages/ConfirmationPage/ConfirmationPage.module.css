@@ -1,0 +1,115 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  .card {
+    background: rgba(var(--pure-white), 0.95);
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    max-width: 560px;
+    box-shadow: 0 8px 32px rgba(var(--void-black), 0.15);
+    border: 1px solid var(--quantum-gray);
+  }
+  
+  .iconContainer {
+    position: relative;
+    margin: 0 auto 2rem;
+    width: fit-content;
+  }
+  
+  .mailIcon {
+    color: var(--neon-cyan);
+    font-size: 3.5rem;
+    filter: drop-shadow(0 0 8px rgba(var(--neon-cyan), 0.3));
+    z-index: 2;
+    position: relative;
+  }
+  
+  .pulseEffect {
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    background: rgba(var(--neon-cyan), 0.1);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
+  }
+  
+  .title {
+    color: var(--void-black);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .instructions {
+    color: var(--quantum-gray);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+  
+  .email {
+    color: var(--cyber-blue);
+    font-weight: 600;
+    margin: 0 0.3rem;
+  }
+  
+  .resendButton {
+    background: linear-gradient(135deg, var(--cyber-blue), var(--deep-space));
+    color: var(--pure-white);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 0 auto 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .resendButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(var(--neon-cyan), 0.2);
+  }
+  
+  .arrowIcon {
+    transition: transform 0.3s ease;
+  }
+  
+  .resendButton:hover .arrowIcon {
+    transform: translateX(3px);
+  }
+  
+  .spamWarning {
+    color: var(--quantum-gray);
+    font-size: 0.9rem;
+    margin-top: 1.5rem;
+  }
+  
+  .contactLink {
+    color: var(--neon-cyan);
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 0.3rem;
+    text-decoration: underline;
+    transition: text-shadow 0.3s ease;
+  }
+  
+  .contactLink:hover {
+    text-shadow: 0 0 8px rgba(var(--neon-cyan), 0.3);
+  }
