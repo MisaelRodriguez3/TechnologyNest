@@ -11,6 +11,7 @@ class Config(BaseModel):
     ALGORITHM: str = config("ALGORITHM", default="HS256")
     CIPHER_KEY: str = config("CIPHER_KEY")
     CLIENT_URL: str = config("CLIENT_URL", default="http://localhost:5173")
+    ENVIROMENT: str = config("ENVIROMENT")
 
     #API's Externas
     RECAPTCHA_SECRET_KEY: str = config("RECAPTCHA_SECRET_KEY")

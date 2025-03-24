@@ -1,11 +1,10 @@
 from pydantic import BaseModel, Field
-from .common import BaseOut
+from .common import BaseOut, Author, TopicInfo
 from uuid import UUID
 
 class ExampleBase(BaseModel):
     """Clase base para el esquema de `ejemplos`."""
     topic_id: UUID
-    user_id: UUID
 
 class ExampleIn(ExampleBase):
     """Clase para validar los datos para crear un `ejemplo`."""
@@ -33,8 +32,7 @@ class ExampleIn(ExampleBase):
                     else:
                         print(f'{numero} no es un número primo.')
                 """,
-                "topic_id": "3f8a07d5-2b3c-4d23-9b2b-91b2c82a8d52",
-                "user_id": "c5f1e4b8-76cf-4cb1-8eb1-3b062b86a5d1"
+                "topic_id": "3f8a07d5-2b3c-4d23-9b2b-91b2c82a8d52"
             }
         }
 
@@ -51,8 +49,14 @@ class ExampleUpdate(BaseModel):
             }
         }
 
-class ExampleOut(BaseOut, ExampleIn):
+class ExampleOut(BaseOut):
     """Clase para typar los datos de salida de los `ejemplos`."""
+    title: str
+    description: str
+    code: str
+    author: Author
+    topic: TopicInfo
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -74,8 +78,14 @@ class ExampleOut(BaseOut, ExampleIn):
                     else:
                         print(f'{numero} no es un número primo.')
                 """,
-                "topic_id": "3f8a07d5-2b3c-4d23-9b2b-91b2c82a8d52",
-                "user_id": "c5f1e4b8-76cf-4cb1-8eb1-3b062b86a5d1",
+                "author": {
+                  "id": "47162d6c-6583-4142-8c64-33c4bfa25bad",
+                  "username": "El Mictla"
+                },
+                "topic": {
+                  "id": "4cff4a89-ecd2-4cca-8aa2-60e80dba6467",
+                  "name": "python"
+                },
                 "created_at": "2025-02-03 14:23:45.678901+00:00",
                 "updated_at": "2025-02-03 14:23:45.678901+00:00"
             }

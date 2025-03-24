@@ -4,7 +4,6 @@ from .common import BaseOut
 
 class CommentBase(BaseModel):
     """Clase base del esquema de los comentarios"""
-    user_id: UUID
     post_id: UUID
 
 class CommentIn(CommentBase):
@@ -15,8 +14,7 @@ class CommentIn(CommentBase):
         json_schema_extra = {
             "example": {
                 "comment": "Puedes buscar en la documentación.",
-                "post_id": "3f8a07d5-2b3c-4d23-9b2b-91b2c82a8d52",
-                "user_id": "c5f1e4b8-76cf-4cb1-8eb1-3b062b86a5d1",
+                "post_id": "3f8a07d5-2b3c-4d23-9b2b-91b2c82a8d52"
             }
         }
 

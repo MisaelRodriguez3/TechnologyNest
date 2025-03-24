@@ -1,35 +1,34 @@
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { TextAreaProps } from "../../../types/form.types";
+import styles from"./Textarea.module.css"
 
-import "./textarea.css"
-
-function TextArea<T extends Record<string, any>>({
+function TextArea<T extends Record<string, unknown>>({
     id, 
     label, 
     error,
     maxLength,
     register,
     watch
-    }: TextAreaProps<T>) {
+    }: Readonly<TextAreaProps<T>>) {
     
     const value = watch ? watch(id) : ""
 
     return (
-        <div className="form-group">
-            <label htmlFor={String(id)}>{label}</label>
+        <div className={styles.formGroup}>
+            <label htmlFor={id}>{label}</label>
             <textarea 
-                id={String(id)}
+                id={id}
                 placeholder={`Escribe tu ${label}...`}
-                className={`form-control ${error ? 'error' : ''}`}
+                className={`${styles.formControl} ${error ? styles.error : ''}`}
                 maxLength={maxLength}
-                {...register(id as any)}
+                {...register(id)}
             />
             {(watch && maxLength) &&             
             <div className="character-counter">
-                {value?.length || 0}/{maxLength}
+                {String(value).length || 0}/{maxLength}
             </div>
             }
-            <div className={`error-container ${error ? "active" : ""}`}>
+            <div className={`${styles.errorContainer} ${error ? styles.active : ""}`}>
                 {error && <ErrorMessage message={error.message} />}
             </div>
         </div>

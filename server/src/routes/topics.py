@@ -9,13 +9,13 @@ from src.utils.response import ApiResponse
 
 router = APIRouter(prefix="/topics", tags=["Topics"])
 
-@router.get("/", response_model=ApiResponse[list[TopicOut]], responses=GET_RESPONSES)
+@router.get("", response_model=ApiResponse[list[TopicOut]], responses=GET_RESPONSES)
 async def get_topics(session: Session = Depends(get_session)):
     topics = get_all_topics(session)
 
     return ApiResponse(data=topics)
 
-@router.post("/", response_model=ApiResponse[str], status_code=201, responses=POST_RESPONSES)
+@router.post("", response_model=ApiResponse[str], status_code=201, responses=POST_RESPONSES)
 async def create(data: TopicIn, session: Session = Depends(get_session)):
     response =  create_topic(session, data)
 

@@ -1,11 +1,12 @@
-from sqlmodel import Session, SQLModel
-from typing import Type, TypeVar
-from uuid import UUID
-from sqlmodel import Session, select, func
 import math
+from typing import Sequence, Type, TypeVar
+from pydantic import BaseModel
+from sqlmodel import Session, SQLModel
+from sqlmodel import Session, select, func
+from src.schemas.common import Author, TopicInfo
 
 T = TypeVar("T", bound=SQLModel)
-
+Model = TypeVar("T", bound=BaseModel)
 
 def pagination(
     session: Session,
@@ -45,3 +46,30 @@ def pagination(
         "offset": (current_page - 1) * page_size
     }
 
+def set_author_and_topic_info(data: Sequence[SQLModel] | SQLModel, model:Type[Model]) -> list[Model] | Model:
+    if isinstance(data, SQLModel):
+        return model(
+            **data.model_dump(),
+            author=Author(
+                id=data.author.id,
+                username=data.author.username
+            ),
+            topic=TopicInfo(
+                id=data.topic.id,
+                name=data.topic.name
+            )
+        )
+    
+    return [
+        model(
+            **d.model_dump(),
+            author=Author(
+                id=d.author.id,
+                username=d.author.username
+            ),
+            topic=TopicInfo(
+                id=d.topic.id,
+                name=d.topic.name
+            )
+        ) for d in data
+    ]

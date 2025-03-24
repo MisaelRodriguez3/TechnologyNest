@@ -4,8 +4,8 @@ interface ButtonProps {
     action: "auth" | "create" | "update" | "delete"
     fn?: () => void
     content: string
-    content_loading: string
-    loading: boolean
+    content_loading?: string
+    loading?: boolean
 }
 
 function Button({action, fn, content, content_loading, loading}: Readonly<ButtonProps>) {
@@ -16,7 +16,6 @@ function Button({action, fn, content, content_loading, loading}: Readonly<Button
             className={`${styles.button} ${styles[action]}`}
             {...(loading ? {disabled:true} : {})}
         >
-            
             {loading ? content_loading : content}
         </button>
     )

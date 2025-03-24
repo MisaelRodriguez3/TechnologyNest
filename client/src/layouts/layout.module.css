@@ -1,17 +1,19 @@
-.layout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    padding-top: 60px; /* Ajusta el espacio para el navbar */
-  }
-  
-  .layoutMain {
-    display: flex;
-    flex: 1;
-  }
-  
+/* Layout principal */
+.content {
+  margin-left: 25%; /* Espacio para el sidebar por defecto */
+  margin-top: 80px;
+  transition: margin-left 0.3s ease;
+  min-height: calc(100vh - 135px); /* Ajusta según tu footer */
+}
+
+/* Clase cuando NO hay sidebar */
+.contentFull {
+  margin-left: 0;
+}
+
+/* Añade estas media queries para responsividad */
+@media (max-width: 768px) {
   .content {
-    flex: 1;
-    padding: 20px;
+    margin-left: 0;
   }
-  
+}

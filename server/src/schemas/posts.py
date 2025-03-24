@@ -1,11 +1,10 @@
 from pydantic import Field, BaseModel
-from .common import BaseOut
+from .common import Author, BaseOut, TopicInfo
 from uuid import UUID
 
 class PostBase(BaseModel):
     """Clase base para los esquemas de `posts`."""
     topic_id: UUID
-    user_id: UUID
 
 class PostIn(PostBase):
     """Clase para validar los datos al crear un `post`."""
@@ -31,8 +30,7 @@ class PostIn(PostBase):
                         print("Debe ingresar un número válido.")
 
                 """,
-                "topic_id": "3f8a07d5-2b3c-4d23-9b2b-91b2c82a8d52",
-                "user_id": "c5f1e4b8-76cf-4cb1-8eb1-3b062b86a5d1"
+                "topic_id": "3f8a07d5-2b3c-4d23-9b2b-91b2c82a8d52"
             }
         }
 
@@ -49,7 +47,13 @@ class PostUpdate(BaseModel):
             }
         }
 
-class PostOut(BaseOut, PostIn):
+class PostOut(BaseOut):
+    title: str
+    description: str
+    code: str | None
+    author: Author
+    topic: TopicInfo
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -69,8 +73,14 @@ class PostOut(BaseOut, PostIn):
                         print("Debe ingresar un número válido.")
 
                 """,
-                "topic_id": "3f8a07d5-2b3c-4d23-9b2b-91b2c82a8d52",
-                "user_id": "c5f1e4b8-76cf-4cb1-8eb1-3b062b86a5d1",
+                "author": {
+                  "id": "47162d6c-6583-4142-8c64-33c4bfa25bad",
+                  "username": "El Mictla"
+                },
+                "topic": {
+                  "id": "4cff4a89-ecd2-4cca-8aa2-60e80dba6467",
+                  "name": "python"
+                },
                 "created_at": "2025-02-03 14:23:45.678901+00:00",
                 "updated_at": "2025-02-03 14:23:45.678901+00:00"
             }

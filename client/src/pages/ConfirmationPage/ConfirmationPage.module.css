@@ -7,7 +7,7 @@
   }
   
   .card {
-    background: rgba(var(--pure-white), 0.95);
+    background: var(--silver-surfer);
     border-radius: 16px;
     padding: 3rem 2.5rem;
     text-align: center;
@@ -23,9 +23,9 @@
   }
   
   .mailIcon {
-    color: var(--neon-cyan);
+    color: var(--glaucous-dark);
     font-size: 3.5rem;
-    filter: drop-shadow(0 0 8px rgba(var(--neon-cyan), 0.3));
+    filter: drop-shadow(0 0 8px rgba(var(--glaucous-dark), 0.3));
     z-index: 2;
     position: relative;
   }

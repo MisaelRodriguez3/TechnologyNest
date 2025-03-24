@@ -33,3 +33,9 @@
   margin-top: 40px;
   text-align: center;
 }
+
+.link {
+  color: var(--glaucous-dark);
+  padding: 2px;
+  margin: 2px;
+}

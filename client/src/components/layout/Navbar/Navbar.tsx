@@ -1,25 +1,62 @@
-import { useEffect, useState } from "react";
-import styles from "./navbar.module.css";
+import { useState } from 'react';
+import { Link } from "react-router-dom";
+import { FaSearch, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { useAuth } from '../../../context/AuthProvider';
+import styles from './Navbar.module.css';
 
-export const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+interface NavbarProps {
+  logged: boolean;
+}
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.scrollY > 50;
-      setIsScrolled(scrolled);
-      document.body.classList.toggle("scrolled-body", scrolled)
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+const Navbar = ({ logged }: NavbarProps) => {
+  const [searchActive, setSearchActive] = useState(false);
+  const {logout} = useAuth();
 
   return (
-    <nav className={`${styles.navbar} ${isScrolled ? styles.scrolled : ""}`}>
-      <div className={styles.title}>
-        <h1>Technology Nest</h1>
+    <header className={styles.navbar}>
+      <h1 className={styles.sitename}>
+        <Link to="/">Technology Nest</Link>
+      </h1>
+      
+      <div className={`${styles.searchContainer} ${searchActive ? styles.active : ''}`}>
+        <form className={styles.searchForm}>
+          <input 
+            type="text" 
+            placeholder="Buscar..." 
+            className={styles.searchInput}
+          />
+          <FaSearch 
+            className={styles.searchIcon} 
+            onClick={() => setSearchActive(!searchActive)}
+          />
+        </form>
       </div>
-    </nav>
+
+      <nav className={styles.menuContainer}>
+        {logged ? (
+          <ul className={styles.menu}>
+            <li className={styles.menuItem}>
+              <Link to="/profile" className={styles.iconLink}>
+                <FaUser className={styles.menuIcon} />
+              </Link>
+            </li>
+            <li className={styles.menuItem}>
+              <FaSignOutAlt className={styles.menuIcon} onClick={logout}/>
+            </li>
+          </ul>
+        ) : (
+          <ul className={styles.menu}>
+            <li className={styles.menuItem}>
+              <Link to="/login" className={styles.loginLink}>Log in</Link>
+            </li>
+            <li className={styles.menuItem}>
+              <Link to="/register" className={styles.registerLink}>Sign up</Link>
+            </li>
+          </ul>
+        )}
+      </nav>
+    </header>
   );
 };
+
+export default Navbar;

@@ -2,14 +2,13 @@ import { useRef } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { useAuth } from '../../context/AuthProvider';
 import { RegisterFormData, registerSchema } from '../../schemas/user.schema';
 import FormField from '../../components/ui/Input/Input';
 import { RegisterFormProps } from '../../types/register.types';
 import AppForm from '../../components/ui/Form/Form';
-import { registerRequest } from '../../services/auth.service';
-import { useNavigate } from "react-router-dom";
 import Button from '../../components/ui/Button/Button';
-import styles from "./RegisterForm.module.css"
+import formStyles from  '../../styles/Form.module.css'
 
 /**
  * Formulario de registro
@@ -19,18 +18,15 @@ import styles from "./RegisterForm.module.css"
  */
 const RegisterForm = ({
   recaptchaSiteKey,
-  formTitle = 'Crear Cuenta',
-  loading = false,
-  setLoading
+  formTitle = 'Crear Cuenta'
 }: RegisterFormProps) => {
-  const navigate = useNavigate()
+  const {signup, loading} = useAuth();
   const {
     register,
     handleSubmit,
     setValue,
     trigger,
-    formState: { errors },
-    getValues
+    formState: { errors }
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     mode: "onBlur"
@@ -44,21 +40,11 @@ const RegisterForm = ({
   };
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
-    try {
-      setLoading(true);
-      console.log(data)
-      const result = await registerRequest(data);
-      console.log(result.data)
-      navigate("/confirm-email", {state: {email: getValues("email")}})
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false);
-    }
+    await signup(data)
   };
 
   return (
-    <div className={styles.form_container}>
+    <div className={formStyles.form_container}>
       <h2>{formTitle}</h2>
 
       <AppForm parentMethod={handleSubmit(onSubmit)}>
@@ -115,13 +101,13 @@ const RegisterForm = ({
           ref={recaptchaRef}
           sitekey={recaptchaSiteKey}
           onChange={handleRecaptchaChange}
-          className={styles.recaptcha}
+          className={formStyles.recaptcha}
         />
         {errors.recaptcha && (
-          <p className={styles.error_message}>{errors.recaptcha.message}</p>
+          <p className={formStyles.error_message}>{errors.recaptcha.message}</p>
         )}
         
-        <div className={styles.button_container}>
+        <div className={formStyles.button_container}>
           <Button
             action='auth'
             content='Registrarse'
@@ -131,6 +117,8 @@ const RegisterForm = ({
         </div>
 
       </AppForm>
+
+      <a className={formStyles.link} href="/login">¿Ya tienes cuenta?</a>
     </div>
   );
 };

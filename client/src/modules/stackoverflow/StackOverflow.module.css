@@ -1,0 +1,174 @@
+/* StackOverflowFeed.module.css */
+.feedContainer {
+  background-color: var(--deep-space);
+  color: var(--silver-surfer);
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.feedTitle {
+  color: var(--neon-cyan);
+  border-bottom: 2px solid var(--cyber-blue);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.feedLayout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+.questionsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.questionItem {
+  background: rgba(45, 49, 66, 0.8);
+  border: 1px solid var(--quantum-gray);
+  border-radius: 8px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.questionItem:hover {
+  border-color: var(--neon-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 245, 212, 0.1);
+}
+
+.questionItem.selected {
+  border-color: var(--neon-cyan);
+  background: var(--cyber-blue);
+}
+
+.questionHeader {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--neon-cyan);
+}
+
+.questionVotes,
+.questionAnswers,
+.questionViews {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.questionTitle {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+
+.questionTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  background: var(--quantum-gray);
+  color: var(--neon-cyan);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+
+.questionDetail {
+  background: rgba(45, 49, 66, 0.8);
+  border: 1px solid var(--quantum-gray);
+  border-radius: 8px;
+  padding: 2rem;
+  position: sticky;
+  top: 5rem; /* Distancia desde la parte superior */
+  max-height: calc(100vh - 3rem); /* Altura máxima según viewport */
+  overflow-y: auto; /* Scroll interno si el contenido es muy largo */
+}
+.detailContent {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.detailTitle {
+  color: var(--neon-cyan);
+  margin-bottom: 1rem;
+}
+
+.metadata {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+  background: var(--cyber-blue);
+  border-radius: 8px;
+}
+
+.metaItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.metaLabel {
+  color: var(--neon-cyan);
+  font-weight: 500;
+}
+
+.metaValue {
+  color: var(--silver-surfer);
+}
+
+.stats {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+
+.statBox {
+  text-align: center;
+  padding: 1rem;
+  background: var(--cyber-blue);
+  border-radius: 8px;
+  flex: 1;
+}
+
+.statValue {
+  display: block;
+  font-size: 1.5rem;
+  color: var(--neon-cyan);
+  font-weight: bold;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: var(--silver-surfer);
+}
+
+.detailLink {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(135deg, var(--cyber-blue), var(--neon-cyan));
+  color: var(--pure-white);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.detailLink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 245, 212, 0.3);
+}
+
+.detailPlaceholder {
+  text-align: center;
+  color: var(--quantum-gray);
+  padding: 2rem;
+}

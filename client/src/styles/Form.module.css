@@ -1,15 +1,19 @@
 .form_container {
-    width: 500px;
-    padding: 20px;
-    background-color: var(--jet);
-    border-radius: 5px;
-    border: 1px solid var(--cadet-gray);
-  }
+  width: 500px;
+  padding: 20px;
+  background: var(--cyber-blue);
+  border-radius: 5px;
+  border: 1px solid var(--neon-cyan);
+}
 
   h2 {
     text-align: center;
   }
   
+  .text {
+    color: #fff;
+  }
+
   .error {
     border-color: #ff3860;
   }
@@ -30,6 +34,30 @@
   }
 
 .button_container {
-  margin-top: 40px;
+  margin-top: 20px;
   text-align: center;
+}
+
+.link {
+  color: var(--glaucous);
+  padding: 2px;
+  margin: 2px;
+}
+
+/* Estilos para los formularios de creación y actualización de entradas*/
+
+.entryFormContainer {
+  width: 500px;
+  padding: 20px;
+  background: var(--cyber-blue);
+  border-radius: 5px;
+  border: 1px solid var(--neon-cyan);
+  max-height: 100vh;
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
 }

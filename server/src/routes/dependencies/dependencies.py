@@ -1,15 +1,16 @@
 from uuid import UUID
 from fastapi import Depends, APIRouter
 from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy import func
 from sqlmodel import Session, select
 import jwt
-from jwt.exceptions import InvalidTokenError
+from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 from src.models.users import User
 from src.schemas.auth import TokenData
 from src.core.config import CONFIG
 from src.core.database import get_session
 from src.core.security import verify_password, ALGORITHM
-from src.utils.exceptions import UnauthorizedError, ServerError, BadRequest, ForbiddenError
+from src.utils.exceptions import UnauthorizedError, ServerError, ForbiddenError
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/login")
 router = APIRouter()
@@ -24,8 +25,11 @@ def get_account_by_username(session: Session, username: str):
         User: Devuelve un objecto de la clase del usuario o empresa (próximamnte).
         Si no se encuntra al usuario no regresa nada
     """
-    account = session.exec(select(User).where(User.username == username)).first()
-    if account:
+    result = session.exec(select(User, func.pgp_sym_decrypt(User.email, CONFIG.CIPHER_KEY).label("decrypted_email")).where(User.username == username)).first()
+    if result:
+        print(result)
+        account, decrypted_email = result
+        account.email = decrypted_email
         return account
 
 def authenticate_user(session: Session, username: str, password: str):
@@ -63,16 +67,13 @@ async def get_current_account(session: Session = Depends(get_session), token: st
         username = payload.get("username")
         if username is None:
             raise UnauthorizedError()
-        token_data = TokenData(
-            username=username,
-            email=payload.get("email"),
-            account_type=payload.get("account_type")
-        )
-        account = get_account_by_username(session, token_data.username)
+        account = get_account_by_username(session, username)
         if account is None:
             raise UnauthorizedError()
         return account
-    except InvalidTokenError:
+    except InvalidTokenError as e:
+        raise UnauthorizedError() from e
+    except ExpiredSignatureError as e:
         raise UnauthorizedError()
     except Exception as e:
         raise ServerError() from e
@@ -109,4 +110,3 @@ async def is_author(author_id: UUID, current_user: User = Depends(get_current_ac
     if current_user.id != author_id:
         raise ForbiddenError()
     return True
-

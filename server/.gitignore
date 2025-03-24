@@ -1,7 +1,7 @@
 venv/
 migrations/
 seeders/
-logs/*
+logs/
 alembic.ini
 app.log
 

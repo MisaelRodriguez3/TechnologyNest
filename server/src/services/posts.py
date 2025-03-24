@@ -1,14 +1,54 @@
-from sqlmodel import Session
-from uuid import UUID
 from sqlmodel import Session, select
+from uuid import UUID
 from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from src.utils.exceptions import ConflictError, ServerError, NotFound, BadRequest
 from src.libs.logger import logger
 from src.models.posts import Post
 from src.models.topics import Topic
+from src.models.users import User
 from src.schemas.posts import PostIn, PostOut, PostUpdate, PaginatedPosts
-from src.helpers.db_helpers import pagination
+from src.helpers.db_helpers import pagination, set_author_and_topic_info
+
+def get_all_posts(
+    _session: Session,
+    page: int
+) -> PaginatedPosts | str:
+    """Obtiene retos paginados usando el helper de paginación"""
+    try:
+        # Obtener datos de paginación
+        pagination_data = pagination(
+            session=_session,
+            model=Post,
+            page=page,
+        )
+        
+        # Verificar si hay resultados
+        if pagination_data["total_items"] == 0:
+            # Validar existencia del tema
+            return "Sin retos para este tema"
+        
+        # Obtener resultados paginados
+        posts = _session.exec(
+            select(Post)
+            .join(Topic)  # Cargar datos del tema en una sola consulta
+            .join(User)   # Cargar datos del usuario en una sola consulta
+            .order_by(desc(Post.created_at))
+            .offset(pagination_data["offset"])
+            .limit(pagination_data["page_size"])
+        ).all()
+        # Convertir a modelo de salida
+        posts_out = set_author_and_topic_info(posts, PostOut)
+        
+        return PaginatedPosts(
+            total_pages=pagination_data["total_pages"],
+            page=pagination_data["page"],
+            posts=posts_out
+        )
+        
+    except SQLAlchemyError as e:
+        logger.error(f"Error en base de datos: {str(e)}")
+        raise ServerError("Error al obtener los retos")
 
 def get_all_posts_by_topic(
     _session: Session,
@@ -17,6 +57,8 @@ def get_all_posts_by_topic(
 ) -> PaginatedPosts | str:
     """Obtiene posts paginados por tema usando el helper de paginación"""
     try:
+        if not _session.get(Topic, topic_id):
+            raise BadRequest()
         # Obtener datos de paginación
         pagination_data = pagination(
             session=_session,
@@ -26,24 +68,20 @@ def get_all_posts_by_topic(
             joins=[Topic]
         )
         
-        # Verificar si hay resultados
         if pagination_data["total_items"] == 0:
-            # Validar existencia del tema
-            if not _session.get(Topic, topic_id):
-                raise BadRequest()
             return "Sin posts para este tema"
         
-        # Obtener resultados paginados
         posts = _session.exec(
             select(Post)
             .where(Post.topic_id == topic_id)
+            .join(Topic)
+            .join(User)
             .order_by(desc(Post.created_at))
             .offset(pagination_data["offset"])
             .limit(pagination_data["page_size"])
         ).all()
         
-        # Convertir a modelo de salida
-        posts_out = [PostOut.model_validate(c) for c in posts]
+        posts_out = set_author_and_topic_info(posts, PostOut)
         
         return PaginatedPosts(
             total_pages=pagination_data["total_pages"],
@@ -65,16 +103,18 @@ def get_one_post(_session: Session, id: UUID) -> PostOut:
             logger.warning(f"post con id: {id}, no encontrado.")
             raise NotFound()
 
-        return post
+        return set_author_and_topic_info(post,PostOut)
     except SQLAlchemyError as e:
         logger.error(f"Error al obtener el post con id {id} de post: {str(e)}", exc_info=True)
         raise ServerError() from e
 
-def create_post(_session: Session, data: PostIn) -> str:
+def create_post(_session: Session, data: PostIn, user_id: UUID) -> str:
     """Crea un nuevo post"""
     try:
         logger.info("Creando un nuevo post")
-        post = Post(**data.model_dump())
+        post_data = data.model_dump()
+        post_data["user_id"] = user_id
+        post = Post(**post_data)
         _session.add(post)
         _session.commit()
         _session.refresh(post)

@@ -1,5 +1,6 @@
 import uvicorn
 from src.app import create_app
+from src.core.config import CONFIG
 
 title = "Foro TechnologyNest."
 summary = "API para las operaciones de TechnologyNest."
@@ -16,5 +17,19 @@ info = {
 
 app = create_app(info)
 
+
 if __name__ == "__main__":
-    uvicorn.run(app)
+    config = {
+        'app': 'main:app'
+    }
+
+    if CONFIG.ENVIROMENT == 'dev':
+        cert_path = "../certs/localhost.pem"
+        key_path = "../certs/localhost-key.pem"
+
+        config.update({
+            "ssl_keyfile": key_path,
+            "ssl_certfile": cert_path
+        })
+        
+    uvicorn.run(**config)

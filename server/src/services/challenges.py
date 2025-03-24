@@ -7,8 +7,49 @@ from src.utils.exceptions import ConflictError, ServerError, NotFound, BadReques
 from src.libs.logger import logger
 from src.models.challenges import Challenge
 from src.models.topics import Topic
+from src.models.users import User
 from src.schemas.challenges import ChallengeIn, ChallengeOut, ChallengeUpdate, PaginatedChallenges
-from src.helpers.db_helpers import pagination
+from src.helpers.db_helpers import pagination, set_author_and_topic_info
+
+def get_all_challenges(
+    _session: Session,
+    page: int
+) -> PaginatedChallenges | str:
+    """Obtiene retos paginados usando el helper de paginación"""
+    try:
+        # Obtener datos de paginación
+        pagination_data = pagination(
+            session=_session,
+            model=Challenge,
+            page=page,
+        )
+        
+        # Verificar si hay resultados
+        if pagination_data["total_items"] == 0:
+            # Validar existencia del tema
+            return "Sin retos para este tema"
+        
+        # Obtener resultados paginados
+        challenges = _session.exec(
+            select(Challenge)
+            .join(Topic)  # Cargar datos del tema en una sola consulta
+            .join(User)   # Cargar datos del usuario en una sola consulta
+            .order_by(desc(Challenge.created_at))
+            .offset(pagination_data["offset"])
+            .limit(pagination_data["page_size"])
+        ).all()
+        # Convertir a modelo de salida
+        challenges_out = set_author_and_topic_info(challenges, ChallengeOut)
+        
+        return PaginatedChallenges(
+            total_pages=pagination_data["total_pages"],
+            page=pagination_data["page"],
+            challenges=challenges_out
+        )
+        
+    except SQLAlchemyError as e:
+        logger.error(f"Error en base de datos: {str(e)}")
+        raise ServerError("Error al obtener los retos")
 
 def get_all_challenges_by_topic(
     _session: Session,
@@ -17,6 +58,11 @@ def get_all_challenges_by_topic(
 ) -> PaginatedChallenges | str:
     """Obtiene retos paginados por tema usando el helper de paginación"""
     try:
+
+        if not _session.get(Topic, topic_id):
+            raise BadRequest("El tema especificado no existe.")
+
+
         # Obtener datos de paginación
         pagination_data = pagination(
             session=_session,
@@ -29,21 +75,20 @@ def get_all_challenges_by_topic(
         # Verificar si hay resultados
         if pagination_data["total_items"] == 0:
             # Validar existencia del tema
-            if not _session.get(Topic, topic_id):
-                raise BadRequest()
             return "Sin retos para este tema"
         
         # Obtener resultados paginados
         challenges = _session.exec(
             select(Challenge)
             .where(Challenge.topic_id == topic_id)
+            .join(Topic)  # Cargar datos del tema en una sola consulta
+            .join(User)   # Cargar datos del usuario en una sola consulta
             .order_by(desc(Challenge.created_at))
             .offset(pagination_data["offset"])
             .limit(pagination_data["page_size"])
         ).all()
-        
         # Convertir a modelo de salida
-        challenges_out = [ChallengeOut.model_validate(c) for c in challenges]
+        challenges_out = set_author_and_topic_info(challenges, ChallengeOut)
         
         return PaginatedChallenges(
             total_pages=pagination_data["total_pages"],
@@ -65,16 +110,18 @@ def get_one_challenge(_session: Session, id: UUID) -> ChallengeOut:
             logger.warning(f"reto con id: {id}, no encontrado.")
             raise NotFound()
 
-        return challenge
+        return set_author_and_topic_info(challenge, ChallengeOut)
     except SQLAlchemyError as e:
         logger.error(f"Error al obtener el reto con id {id} de reto: {str(e)}", exc_info=True)
         raise ServerError() from e
 
-def create_challenge(_session: Session, data: ChallengeIn) -> str:
+def create_challenge(_session: Session, data: ChallengeIn, user_id: UUID) -> str:
     """Crea un nuevo reto"""
     try:
         logger.info("Creando un nuevo reto")
-        challenge = Challenge(**data.model_dump())
+        challenge_data = data.model_dump()
+        challenge_data["user_id"] = user_id
+        challenge = Challenge(**challenge_data)
         _session.add(challenge)
         _session.commit()
         _session.refresh(challenge)

@@ -1,6 +1,8 @@
-from sqlmodel import Field
-from .common import Base
 from uuid import UUID
+from sqlmodel import Field, Relationship
+from .common import Base
+from .topics import Topic
+from .users import User
 
 class Example(Base, table=True):
     """"Representation of the `tbl_examples` table of the database"""
@@ -12,3 +14,6 @@ class Example(Base, table=True):
     code: str = Field(nullable=False, max_length=5000)
     topic_id: UUID = Field(nullable=False, index=True, foreign_key="tbl_topics.id")
     user_id: UUID = Field(nullable=False, index=True, foreign_key="tbl_users.id")
+
+    topic: Topic = Relationship(back_populates='examples')
+    author: User = Relationship(back_populates='examples')

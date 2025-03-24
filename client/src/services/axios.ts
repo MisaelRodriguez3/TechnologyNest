@@ -14,16 +14,19 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) =>  Promise.reject(error)
+  (error) =>  Promise.reject(new Error(error))
 );
 
 // Interceptor de respuestas para manejar errores globales
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    if (error.response.status === 401) {
+      localStorage.removeItem("token")
+      window.location.href = "/login"
+    }
     const errorMessage = error.response?.data?.message || error.message;
-    console.error("Error en la respuesta:", errorMessage);
-    return Promise.reject(errorMessage);
+    return Promise.reject(new Error(errorMessage));
   }
 );
 

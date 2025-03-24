@@ -1,4 +1,5 @@
-from pydantic import BaseModel, Field, EmailStr, AnyUrl, model_validator
+from uuid import UUID
+from pydantic import BaseModel, Field, EmailStr, model_validator, HttpUrl
 from .common import BaseOut
 
 class UserBase(BaseModel):
@@ -55,7 +56,7 @@ class UserUpdate(BaseModel):
 
 class UserOut(UserBase, BaseOut):
     """Modelo para la salida de datos del usuario"""
-    image_url: AnyUrl = Field(max_length=255)
+    image_url: HttpUrl = Field(max_length=255)
     mfa_active: bool = Field(default=False)
 
     class Config:

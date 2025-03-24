@@ -1,0 +1,95 @@
+.card {
+  background: linear-gradient(145deg, rgba(45, 49, 66, 0.9) 0%, rgba(3, 43, 67, 0.9) 100%);
+  border: 1px solid var(--quantum-gray);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, 
+    transparent 45%,
+    rgba(0, 245, 212, 0.1) 50%,
+    transparent 55%);
+  transform: rotate(30deg);
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 245, 212, 0.25);
+  border-color: var(--neon-cyan);
+}
+
+.card:hover::before {
+  opacity: 1;
+  animation: glowSlide 3s infinite linear;
+}
+
+.title {
+  font-size: 1.5rem;
+  color: var(--neon-cyan);
+  margin-bottom: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.title::before {
+  content: '✦';
+  color: var(--neon-cyan);
+  font-size: 1.2em;
+  text-align: center;
+
+}
+
+.author, .difficulty, .topic {
+  color: var(--silver-surfer);
+}
+
+.difficulty {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid;
+}
+
+
+.date {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.75rem;
+  color: var(--silver-surfer);
+  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+@keyframes glowSlide {
+  0% { transform: translateX(-50%) rotate(30deg); }
+  100% { transform: translateX(50%) rotate(30deg); }
+}

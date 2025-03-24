@@ -1,11 +1,4 @@
-from enum import StrEnum
-from fastapi import Form
-from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr, Field, model_validator
-
-class AccountType(StrEnum):
-    USER = "user"
-    ENTERPRISE = "enterprise"
 
 class Token(BaseModel):
     access_token: str
@@ -16,7 +9,8 @@ class TokenData(BaseModel):
     email: EmailStr
 
 class ChangePassword(BaseModel):
-    """Validación para el cambio o recuperación de contraseñas"""
+    """Validación para el cambio de contraseñas"""
+    previus_password: str = Field(min_length=8, max_length=50)
     password: str = Field(min_length=8, max_length=50)
     confirm_password: str = Field(min_length=8, max_length=50)
 
@@ -29,27 +23,13 @@ class ChangePassword(BaseModel):
             raise ValueError("Las contraseñas no coinciden")
         return values
 
+class ForgotPassword(BaseModel):
+    username: str = Field(min_length=5, max_length=20)
+    email: EmailStr
 
-class OAuth2PasswordRequestFormWithRecaptcha(OAuth2PasswordRequestForm):
-    def __init__(
-        self, 
-        grant_type: str = Form(default="password"),
-        username: str = Form(),
-        password: str = Form(),
-        scope: str = Form(default=""),
-        client_id: str | None = Form(default=None),
-        client_secret: str | None = Form(default=None),
-        recaptcha: str = Form(...)
-    ):
-        super().__init__(
-            grant_type=grant_type, 
-            username=username, 
-            password=password, 
-            scope=scope, 
-            client_id=client_id, 
-            client_secret=client_secret
-        )
-        self.recaptcha = recaptcha
+class ResetPassword(BaseModel):
+    password: str = Field(min_length=8, max_length=50)
+    confirm_password: str = Field(min_length=8, max_length=50)
 
 class OTPIn(BaseModel):
     totp_code: str

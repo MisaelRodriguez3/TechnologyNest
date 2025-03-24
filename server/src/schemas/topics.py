@@ -1,3 +1,4 @@
+from uuid import UUID
 from pydantic import Field, BaseModel
 from .common import BaseOut
 

@@ -1,0 +1,16 @@
+aiosmtplib==4.0.0
+cryptography==44.0.2
+fastapi==0.115.12
+Jinja2==3.1.6
+pydantic==2.10.6
+PyJWT==2.10.1
+PyJWT==2.10.1
+pyotp==2.9.0
+python-decouple==3.8
+python_bcrypt==0.3.2
+qrcode==8.0
+Requests==2.32.3
+SQLAlchemy==2.0.37
+sqlmodel==0.0.24
+starlette==0.46.1
+uvicorn==0.34.0

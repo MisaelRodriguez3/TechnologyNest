@@ -1,14 +1,17 @@
 .button {
     height: 35px;
     border: none;
-    border-radius: 5px;
-    padding: 10px;
+    border-radius: 4px;
+    padding: 0.8rem 1.5rem;
     text-align: center;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 .button:hover {
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 245, 212, 0.3);
 }
 
 .auth {
@@ -19,4 +22,21 @@
 
 .auth:hover{
     background-color: var(--glaucous-dark);
+}
+
+
+.create {
+    background: linear-gradient(135deg, var(--cyber-blue), var(--neon-cyan));
+    color: var(--pure-white);
+}
+
+.update {
+    background: var(--quantum-gray);
+    color: var(--neon-cyan);
+    border: 1px solid var(--neon-cyan);
+}
+
+.delete {
+    background: var(--error-red);
+    color: var(--pure-white);
 }

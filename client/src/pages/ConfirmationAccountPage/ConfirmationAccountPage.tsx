@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { verifyEmailRequest } from '../../services/auth.service';
 import styles from './ConfirmationAccountPage.module.css';
 
@@ -55,9 +55,9 @@ const ConfirmationAccountPage = () => {
             <div className={styles.checkmark}>✓</div>
             <h2>¡Cuenta verificada!</h2>
             <p>Tu correo electrónico ha sido confirmado exitosamente.</p>
-            <a href="/login" className={styles.loginLink}>
+            <Link to="/login" className={styles.loginLink}>
               Ir al inicio de sesión
-            </a>
+            </Link>
           </div>
         )}
 

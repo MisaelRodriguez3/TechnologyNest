@@ -2,14 +2,13 @@ import {  useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useAuth } from "../../context/AuthProvider";
 import FormField from "../../components/ui/Input/Input";
 import { LoginFormProps } from "../../types/login.types";
 import AppForm from "../../components/ui/Form/Form";
-import { loginRequest } from "../../services/auth.service";
-import { useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button/Button";
 import { LoginFormData, loginSchema } from "../../schemas/user.schema";
-import styles from "./LoginForm.module.css"
+import formStyles from  '../../styles/Form.module.css'
 
 /**
  * FOrmulario de Inicio de sesión
@@ -19,11 +18,9 @@ import styles from "./LoginForm.module.css"
  */
 const LoginForm = ({
     recaptchaSiteKey,
-    formTitle = "Iniciar Sesión",
-    loading = false,
-    setLoading
+    formTitle = "Iniciar Sesión"
 }: LoginFormProps) => {
-    const navigate = useNavigate()
+    const {login, loading} = useAuth();
     const {
         register,
         handleSubmit,
@@ -43,35 +40,13 @@ const LoginForm = ({
     };
 
     const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
-        const formData = new FormData();
-        Object.entries(data).forEach(([key, value]) => {
-            formData.append(key, value)
-        })
-
-        try {
-            setLoading(true)
-            const result = await loginRequest(formData);
-            console.log(result)
-            if ("mfa_active" in result.data){
-                localStorage.setItem("username", data.username)
-                navigate("/otp")
-                return
-            }
-            localStorage.setItem("token", result.data.access_token)
-            navigate("/")
-        } catch (error) {
-            console.error("Error de login:", error instanceof Error ? error.message : error);
-        } finally {
-            setLoading(false)
-        }
+        await login(data)
     }
 
     return (
-        <div className={styles.form_container}>
+        <div className={formStyles.form_container}>
             <h2>{formTitle}</h2>
-
             <AppForm parentMethod={handleSubmit(onSubmit)}>
-                
                 <FormField<LoginFormData>
                     label="Usuario"
                     id="username"
@@ -79,7 +54,6 @@ const LoginForm = ({
                     register={register}
                     error={errors.username}
                 />
-
                 <FormField<LoginFormData>
                     label="Contraseña"
                     id="password"
@@ -87,18 +61,17 @@ const LoginForm = ({
                     register={register}
                     error={errors.password}
                 />
-
+                <a className={formStyles.link} href="/forgot-password">¿Olvidaste tu contraseña?</a>
                 <ReCAPTCHA
                     ref={recaptchaRef}
                     sitekey={recaptchaSiteKey}
                     onChange={handleRecaptchaChange}
-                    className={styles.recaptcha}
+                    className={formStyles.recaptcha}
                 />
                 {errors.recaptcha && (
-                  <p className={styles.error_message}>{errors.recaptcha.message}</p>
+                  <p className={formStyles.error_message}>{errors.recaptcha.message}</p>
                 )}
-
-                <div className={styles.button_container}>
+                <div className={formStyles.button_container}>
                     <Button
                         action="auth"
                         content="Iniciar sesión"
@@ -107,6 +80,7 @@ const LoginForm = ({
                     />
                 </div>
             </AppForm>
+            <p className={formStyles.text}>¿Necesitas una cuenta? <a className={formStyles.link} href="/register">Registrate</a></p>
         </div>
     )
 }

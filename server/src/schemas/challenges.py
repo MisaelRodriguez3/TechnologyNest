@@ -1,12 +1,10 @@
-from pydantic import Field, BaseModel
-from .common import BaseOut
 from uuid import UUID
-from src.utils.response import ApiResponse
+from pydantic import Field, BaseModel
+from .common import BaseOut, Author, TopicInfo
 
 class ChallengeBase(BaseModel):
     """Clase base para los esquemas de `retos`."""
     topic_id: UUID
-    user_id: UUID
 
 class ChallengeIn(ChallengeBase):
     """Clase para validar los datos necesarios para crear un `reto`."""
@@ -20,8 +18,7 @@ class ChallengeIn(ChallengeBase):
                 "title": "Generador de contraseñas seguras",
                 "description": "Crea un programa que genere contraseñas aleatorias seguras, utilizando letras mayúsculas, minúsculas, números y símbolos. El usuario debe poder especificar la longitud de la contraseña.",
                 "difficulty": "intermedio", 
-                "topic_id": "3f8a07d5-2b3c-4d23-9b2b-91b2c82a8d52",
-                "user_id": "c5f1e4b8-76cf-4cb1-8eb1-3b062b86a5d1"
+                "topic_id": "3f8a07d5-2b3c-4d23-9b2b-91b2c82a8d52"
             }
         }
 
@@ -38,8 +35,13 @@ class ChallengeUpdate(BaseModel):
             }
         }
 
-class ChallengeOut(BaseOut, ChallengeIn):
+class ChallengeOut(BaseOut):
     """Clase para tipar la salida de los datos"""
+    title: str
+    description: str
+    difficulty: str
+    author: Author
+    topic: TopicInfo
 
     class Config:
         from_attributes = True
@@ -49,8 +51,14 @@ class ChallengeOut(BaseOut, ChallengeIn):
                 "title": "Generador de contraseñas seguras",
                 "description": "Crea un programa que genere contraseñas aleatorias seguras, utilizando letras mayúsculas, minúsculas, números y símbolos. El usuario debe poder especificar la longitud de la contraseña.",
                 "difficulty": "intermedio", 
-                "topic_id": "3f8a07d5-2b3c-4d23-9b2b-91b2c82a8d52",
-                "user_id": "c5f1e4b8-76cf-4cb1-8eb1-3b062b86a5d1",
+                "author": {
+                  "id": "47162d6c-6583-4142-8c64-33c4bfa25bad",
+                  "username": "El Mictla"
+                },
+                "topic": {
+                  "id": "4cff4a89-ecd2-4cca-8aa2-60e80dba6467",
+                  "name": "python"
+                },
                 "created_at": "2025-02-03 14:23:45.678901+00:00",
                 "updated_at": "2025-02-03 14:23:45.678901+00:00"
             }

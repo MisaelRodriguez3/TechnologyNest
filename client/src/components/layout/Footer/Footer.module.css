@@ -1,0 +1,13 @@
+.footer {
+  background: var(--cyber-blue);
+  padding: 1rem;
+  text-align: center;
+  border-top: 2px solid var(--neon-cyan);
+  position: relative;
+}
+
+.footer p {
+  margin: 0;
+  color: var(--silver-surfer);
+  font-family: 'Inter', sans-serif;
+}

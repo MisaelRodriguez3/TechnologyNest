@@ -70,11 +70,13 @@ def get_one_comment(_session: Session, id: UUID) -> CommentOut:
         logger.error(f"Error al obtener el comentario con id {id} de comentario: {str(e)}", exc_info=True)
         raise ServerError() from e
 
-def create_comment(_session: Session, data: CommentIn) -> str:
+def create_comment(_session: Session, data: CommentIn, user_id: UUID) -> str:
     """Crea un nuevo comentario"""
     try:
         logger.info("Creando un nuevo comentario")
-        comment = Comment(**data.model_dump())
+        comment_data = data.model_dump()
+        comment_data["user_id"] = user_id
+        comment = Comment(**comment_data)
         _session.add(comment)
         _session.commit()
         _session.refresh(comment)

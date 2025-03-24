@@ -2,8 +2,6 @@ import { FieldError, FieldValues, Path, UseFormRegister, UseFormWatch } from "re
 
 export interface FormGeneralProps {
   formTitle?: string;
-  loading?: boolean;
-  setLoading: (loading: boolean) => void
 }
 
 export interface FormFieldProps<T extends FieldValues> {
@@ -17,4 +15,13 @@ export interface FormFieldProps<T extends FieldValues> {
 export interface TextAreaProps<T extends FieldValues> extends Omit<FormFieldProps<T>, "type"> {
   maxLength?: number
   watch?: UseFormWatch<T>
+}
+
+interface Options {
+  value: string;
+  label: string;
+}
+
+export interface SelectProps<T extends FieldValues> extends Omit<FormFieldProps<T>, "type"> {
+  options: Options[];
 }

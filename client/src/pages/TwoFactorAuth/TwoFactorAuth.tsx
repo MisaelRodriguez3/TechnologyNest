@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { generateTotpQRResuqest, verifyTOTP } from '../../services/auth.service';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthProvider';
 import styles from './TwoFactorAuth.module.css';
-import { useNavigate } from 'react-router-dom';
 
 const TwoFactorAuth = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const {generateMfaQR, verifyMfa} = useAuth();
+  const username = location.state.username
     
   const [qrCode, setQrCode] = useState<string>('');
   const [otpCode, setOtpCode] = useState('');
@@ -15,12 +18,8 @@ const TwoFactorAuth = () => {
   useEffect(() => {
     const fetchQrCode = async () => {
       try {
-        const response = await generateTotpQRResuqest(String(localStorage.getItem("username")))
-        console.log(response)
-        
-        if (response.status !== 200) throw new Error('Error generating QR code');
-        
-        setQrCode(response.data);
+        const response = await generateMfaQR(username)
+        setQrCode(response);
       } catch (error) {
         setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Unknown error' });
       } finally {
@@ -38,15 +37,11 @@ const TwoFactorAuth = () => {
     }
 
     try {
-      const response = await verifyTOTP({username: String(localStorage.getItem("username")), totp_code: otpCode})
+      await verifyMfa(username, otpCode)
       
-      if (response.status !== 200) throw new Error(String(response) || 'Verification failed');
-
       setMessage({ type: 'success', text: '¡Verificación exitosa! 2FA activado' });
       setIsVerified(true);
       navigate("/")
-      localStorage.setItem("token", response.data.access_token)
-      localStorage.removeItem("username")
     } catch (error) {
       setMessage({ type: 'error', text: error instanceof Error ? error.message : 'Error de verificación' });
     }

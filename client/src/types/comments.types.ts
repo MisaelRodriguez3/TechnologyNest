@@ -1,13 +1,12 @@
-import { CommentFormData } from "../schemas/comment.schema";
-import { FormGeneralProps } from "./form.types";
+import { CreateCommentFormData } from "../schemas/comment.schema";
 
-export interface Comment extends CommentFormData {
+export interface Comment extends CreateCommentFormData {
     id: string;
     created_at: string;
     updated_at: string;
 }
 
-export interface CommentFormProps extends FormGeneralProps<CommentFormData> {
+export interface CommentFormProps {
     post_id: string;
     user_id: string;
 }

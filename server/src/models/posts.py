@@ -1,6 +1,8 @@
-from sqlmodel import Field
-from .common import Base
 from uuid import UUID
+from sqlmodel import Field, Relationship
+from .common import Base
+from .topics import Topic
+from .users import User
 
 class Post(Base, table=True):
     """"Representation of the `tbl_posts` table of the database"""
@@ -12,3 +14,6 @@ class Post(Base, table=True):
     code: str | None = Field(nullable=True, default=None)
     topic_id: UUID = Field(nullable=False, index=True, foreign_key="tbl_topics.id")
     user_id: UUID = Field(nullable=False, index=True, foreign_key="tbl_users.id")
+
+    topic: Topic = Relationship(back_populates='posts')
+    author: User = Relationship(back_populates='posts')

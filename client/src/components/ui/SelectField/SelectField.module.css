@@ -1,7 +1,19 @@
-.error-container {
+.formGroup {
+    margin-top: 20px;
+  }
+
+.formControl {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--cadet-gray);
+}
+
+.errorContainer {
+    padding: 4px;
     min-height: 1.2rem; /* Espacio reservado para el mensaje */
     font-size: 0.875rem; /* Tamaño de fuente adecuado */
-    color: red;
     visibility: hidden; /* Oculta sin perder el espacio */
 }
 

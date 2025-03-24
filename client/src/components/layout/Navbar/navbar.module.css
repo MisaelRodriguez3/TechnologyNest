@@ -1,24 +1,103 @@
 .navbar {
-  top: 0;
-  width: 100%;
-  background-color: var(--jet);
-  color: white;
-  padding: 15px;
-  text-align: center;
-  transition: all 0.3s ease;
+  background: var(--cyber-blue);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--neon-cyan);
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   z-index: 10;
+  height: 70px; /* Altura fija para el navbar */
 }
 
-.title {
-  font-family: "Inter", sans-serif;
-  font-size: large;
-  width: 20%;
+.sitename a {
+  color: var(--neon-cyan);
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  max-width: 500px;
+  margin: 0 2rem;
+}
+
+.searchForm {
+  width: 100%;
+  position: relative;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  background: var(--quantum-gray);
+  border: 1px solid var(--cyber-blue);
+  border-radius: 4px;
+  color: var(--silver-surfer);
+}
+
+.searchIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--neon-cyan);
+  cursor: pointer;
+}
+
+.menuContainer {
+  display: flex;
+  gap: 1rem;
+}
+
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
   margin: 0;
   padding: 0;
 }
 
-.scrolled {
-  background: #23272A;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.loginLink {
+  color: var(--silver-surfer);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--neon-cyan);
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.registerLink {
+  background: var(--neon-cyan);
+  color: var(--void-black);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.iconLink {
+  color: var(--silver-surfer);
+  display: flex;
+  align-items: center;
+}
+
+.menuItem:hover {
+  transform: scale(1.10);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+  }
+  
+  .searchContainer {
+    order: 3;
+    width: 100%;
+    margin-top: 1rem;
+  }
 }

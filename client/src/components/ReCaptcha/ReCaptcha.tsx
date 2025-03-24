@@ -1,6 +1,7 @@
 import ReCAPTCHA from 'react-google-recaptcha';
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { FieldErrors } from 'react-hook-form';
+import ErrorMessage from '../ui/ErrorMessage/ErrorMessage';
 
 export type ReCaptchaFieldHandle = {
   reset: () => void;
@@ -38,7 +39,7 @@ const ReCaptchaField = forwardRef<ReCaptchaFieldHandle, ReCaptchaFieldProps>(
           onChange={handleRecaptchaChange}
           className={className}
         />
-        
+        {errors && <ErrorMessage message='Error en el captcha'/>}
       </div>
     );
   }

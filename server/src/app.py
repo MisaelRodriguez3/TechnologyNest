@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.utils.exceptions import ApiError
 from src.middlewares import logger_middleware
 from src.libs.logger import logger
-from src.routes import topics, challenges, comments, examples, posts, users, auth
+from src.routes import topics, challenges, comments, examples, posts, users, auth, search
 
 def create_app(info: dict[str, str]) -> FastAPI:
     logger.info("Iniciando aplicación.")
@@ -55,6 +55,8 @@ def create_app(info: dict[str, str]) -> FastAPI:
     api_router.include_router(comments.router)
     api_router.include_router(users.router)
     api_router.include_router(auth.router)
+    api_router.include_router(search.router)
+
 
     app.include_router(api_router)
 
