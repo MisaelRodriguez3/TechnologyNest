@@ -21,7 +21,7 @@ app = create_app(info)
 if __name__ == "__main__":
     config = {
         'app': 'main:app',
-        'port': CONFIG.PORT
+        'port': int(CONFIG.PORT)
     }
 
     if CONFIG.ENVIROMENT == 'dev':
