@@ -4,6 +4,7 @@ from pydantic import BaseModel
 class Config(BaseModel):
     "Configuration class, save all enviroment variables to use."
     #Nativas
+    PORT: int = config('PORT')
     SECRET_KEY: str = config("SECRET_KEY")
     DB_URL: str = config("DB_URL")
     DEBUG: bool = config("DEBUG", cast=bool, default=False)
