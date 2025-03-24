@@ -32,5 +32,8 @@ if __name__ == "__main__":
             "ssl_keyfile": key_path,
             "ssl_certfile": cert_path
         })
-        
+    else: 
+        config.update({
+            'host': '0.0.0.0'
+        })
     uvicorn.run(**config)
