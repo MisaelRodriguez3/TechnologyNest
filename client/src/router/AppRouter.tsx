@@ -11,7 +11,6 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage/ForgotPasswordPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage/ResetPasswordPage';
 //import Card from '../features/card/Card';
 //import { CommentSection } from '../features/comment/comment';
-import StackOverflow from '../modules/StackOverflow/StackOverflow';
 //import Random from '../pages/cosa/random';
 import Random2 from '../pages/random2/random';
 //import { ImageCarousel } from '../features/carrusel/carrusel';
@@ -21,6 +20,7 @@ import { Layout } from '../layouts/Main';
 import HomePage from '../pages/HomePage/HomePage';
 import CreateChallengeForm from '../modules/Sections/Challenge/CreateChallengeForm/CreateChallengeForm';
 import ProtectedRoute from './ProtectedRoute';
+import StackOverflow from '../modules/StackOverflow/StackOverflow';
 
 const router = createBrowserRouter([
   {
