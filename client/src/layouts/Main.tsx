@@ -10,7 +10,7 @@ export const Layout = () => {
   const {user, loading} = useAuth();
   const logged = !!user
   const location = useLocation()
-  const withOutSidebar = ["/profile"]
+  const withOutSidebar = ["/profile", '*']
 
   if (loading) return <LoadingScreen/>
   

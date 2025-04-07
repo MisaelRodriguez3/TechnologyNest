@@ -21,12 +21,20 @@ export function TopicsProvider({children}: Readonly<{children: ReactNode}>) {
     const fetchTopics = useCallback(async() => {
         try {
             clearNotifications()
-            const {data} = await getTopicsRequest()
-            setTopics(data)
-            setSuccess('Temas obtnidos correctamente')
+            const _topics = localStorage.getItem('topics')
+
+            if(_topics) {
+                setTopics(JSON.parse(_topics))
+            } else {
+                const {data} = await getTopicsRequest()
+                setTopics(data)
+                localStorage.setItem('topics', JSON.stringify(data))
+            }
+            setSuccess('Temas obtenidos correctamente')
             
         } catch (err) {
             setError(err  instanceof Error ? err.message : 'Error al obtner los temas')
+            localStorage.removeItem('topics')
         } finally {
             setLoading(false)
         }

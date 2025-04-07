@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { useAuth } from '../../../context/AuthProvider';
 import styles from './Navbar.module.css';
@@ -9,8 +9,21 @@ interface NavbarProps {
 }
 
 const Navbar = ({ logged }: NavbarProps) => {
-  const [searchActive, setSearchActive] = useState(false);
+  const navigate = useNavigate()
   const {logout} = useAuth();
+  const [searchActive, setSearchActive] = useState(false);
+  const [searchText, setSearchText] = useState('');
+ 
+  const search = (text: string) => {
+    if (!text.trim()) return;
+    setSearchActive(true);
+    navigate(`/search?q=${encodeURIComponent(text)}`);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    search(searchText);
+  };
 
   return (
     <header className={styles.navbar}>
@@ -19,15 +32,17 @@ const Navbar = ({ logged }: NavbarProps) => {
       </h1>
       
       <div className={`${styles.searchContainer} ${searchActive ? styles.active : ''}`}>
-        <form className={styles.searchForm}>
+        <form className={styles.searchForm} onSubmit={handleSubmit}>
           <input 
             type="text" 
             placeholder="Buscar..." 
             className={styles.searchInput}
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
           />
           <FaSearch 
             className={styles.searchIcon} 
-            onClick={() => setSearchActive(!searchActive)}
+            onClick={() => search(searchText)}
           />
         </form>
       </div>

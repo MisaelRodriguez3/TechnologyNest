@@ -7,9 +7,19 @@ import {
     UpdatePostResponse,
     DeletePostResponse
 } from "../types/posts.types";
+import { UUID } from "crypto";
 
-export const getPostsRequest = async (page: number = 1): Promise<GetPostsResponse> => await api.get(`/posts?page=${page}`)
-export const getPostsByTopicRequest = async ({page, topic_id}: {page: number, topic_id:string}): Promise<GetPostsResponse> => await api.get(`/posts?page=${page}&topic_id=${topic_id}`)
+export const getPostsRequest = async (page: number = 1): Promise<GetPostsResponse> => await api.get('/posts', {
+    params: {
+        page: page
+    }
+})
+export const getPostsByTopicRequest = async (topic_id: UUID, page: number = 1): Promise<GetPostsResponse> => await api.get('/posts', {
+    params: {
+        page: page,
+        topic_id: topic_id
+    }
+})
 export const getOnePostRequest = async(id: string): Promise<GetOnePostResponse> => await api.get(`/posts/${id}`)
 export const createPostRequest = async (data: createPostFormData): Promise<CreatePostResponse> => api.post('/posts', data)
 export const updatePostRequest = async(data: updatePostFormData, id: string): Promise<UpdatePostResponse> => await api.patch(`/posts/${id}`, data)

@@ -6,21 +6,22 @@ import LoginPage from '../pages/LoginPage/LoginPage';
 import ConfirmationPage from '../pages/ConfirmationPage/ConfirmationPage';
 import ConfirmationAccountPage from '../pages/ConfirmationAccountPage/ConfirmationAccountPage';
 import TwoFactorAuth from '../pages/TwoFactorAuth/TwoFactorAuth';
-import ProfilePage from '../pages/ProfilePage/ProfilePage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage/ForgotPasswordPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage/ResetPasswordPage';
-//import Card from '../features/card/Card';
-//import { CommentSection } from '../features/comment/comment';
-//import Random from '../pages/cosa/random';
-import Random2 from '../pages/random2/random';
-//import { ImageCarousel } from '../features/carrusel/carrusel';
-//import { PostCard } from '../features/tarjeta/tarjeta';
-//import { Navbar } from '../components/layout/Header/Header';
 import { Layout } from '../layouts/Main';
-import HomePage from '../pages/HomePage/HomePage';
-import CreateChallengeForm from '../modules/Sections/Challenge/CreateChallengeForm/CreateChallengeForm';
 import ProtectedRoute from './ProtectedRoute';
+import ProfilePage from '../pages/ProfilePage/ProfilePage';
+import Random2 from '../pages/random2/random';
+import HomePage from '../pages/HomePage/HomePage';
+import TopicPage from '../pages/TopicPage/TopicPage';
+import ChallengesPage from '../pages/Sections/Challenges/ChallengesPage';
+import ExamplesPage from '../pages/Sections/Examples/ExamplesPage';
+import PostsPage from '../pages/Sections/Posts/PostsPage';
+import SectionPage from '../pages/Sections/SectionPage';
+import SpecificContentPage from '../pages/SpecificContentPage/SpecificContentPage';
 import StackOverflow from '../modules/StackOverflow/StackOverflow';
+import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
+import SearchPage from '../pages/SearchPage/SearchPage';
 
 const router = createBrowserRouter([
   {
@@ -37,14 +38,16 @@ const router = createBrowserRouter([
           </TopicsProvider>
           ),
         children: [
-          { path: "/", element: <HomePage/>},
+          { index: true, element: <HomePage/>},
           { path: "/comment", element: <Random2/> },
-          {path: '/:topic/:section', element: <HomePage/>},
-          {path: '/:topic', element: <HomePage/>},
-          {path: '/foro', element: <HomePage/>},
-          {path: '/ejemplos-de-codigo', element: <HomePage/>},
-          {path: '/retos', element: <CreateChallengeForm/>},
-          {path: '/stack-overflow', element: <StackOverflow/>},
+          { path: '/search', element: <SearchPage/>},
+          { path: '/:topic/:section/:id', element: <SpecificContentPage/> },
+          { path: '/:topic/:section', element: <SectionPage/> },
+          { path: '/:topic', element: <TopicPage/> },
+          { path: '/foro', element: <PostsPage/> },
+          { path: '/ejemplos-de-codigo', element: <ExamplesPage/> },
+          { path: '/retos', element: <ChallengesPage/> },
+          { path: '/stack-overflow', element: <StackOverflow/> },
           { element: <ProtectedRoute/>,
             children: [
               { path: "/profile", element: <ProfilePage/> },
@@ -52,34 +55,15 @@ const router = createBrowserRouter([
           }
         ],
       },
-      {
-        path: "/register",
-        element: <RegisterPage/>
-      },
-      {
-        path: "/login",
-        element: <LoginPage/>
-      },
-      {
-        path: "/confirm-email",
-        element: <ConfirmationPage/>
-      },
-      {
-        path: "/confirm-account",
-        element: <ConfirmationAccountPage/>
-      },
-      {
-        path: "/otp",
-        element: <TwoFactorAuth/>
-      },
-      {   
-        path: "/forgot-password", 
-        element: <ForgotPasswordPage/>
-      },
-      {
-        path: "/reset-password",
-        element: <ResetPasswordPage/>
-      }
+      {path: "/register",element: <RegisterPage/>},
+      {path: "/login",element: <LoginPage/>},
+      {path: "/confirm-email",element: <ConfirmationPage/>},
+      {path: "/confirm-account",element: <ConfirmationAccountPage/>},
+      {path: "/otp",element: <TwoFactorAuth/>},
+      {path: "/forgot-password", element: <ForgotPasswordPage/>},
+      {path: "/reset-password",element: <ResetPasswordPage/>},
+      {path: '/404', element:<NotFoundPage/>},
+      { path: "*", element: <NotFoundPage /> }
     ]
   }
 ]) 

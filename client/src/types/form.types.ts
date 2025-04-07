@@ -1,7 +1,14 @@
+import { UUID } from "crypto";
 import { FieldError, FieldValues, Path, UseFormRegister, UseFormWatch } from "react-hook-form";
 
 export interface FormGeneralProps {
   formTitle?: string;
+  onSuccess?: () => void;
+}
+
+export interface UpdateFormProps<T> extends FormGeneralProps {
+  prevData: T;
+  id: UUID
 }
 
 export interface FormFieldProps<T extends FieldValues> {

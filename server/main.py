@@ -24,7 +24,7 @@ if __name__ == "__main__":
         'port': int(CONFIG.PORT)
     }
 
-    if CONFIG.ENVIROMENT == 'dev':
+    if CONFIG.ENVIRONMENT == 'dev':
         cert_path = "../certs/localhost.pem"
         key_path = "../certs/localhost-key.pem"
 

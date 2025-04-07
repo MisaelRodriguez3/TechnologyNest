@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Request, APIRouter
 from fastapi.responses import JSONResponse
-from src.core.database import create_db_and_tables
 from fastapi.middleware.cors import CORSMiddleware
+from src.core.database import create_db_and_tables
+from src.core.config import CONFIG
 from src.utils.exceptions import ApiError
 from src.middlewares import logger_middleware
 from src.libs.logger import logger
@@ -33,7 +34,7 @@ def create_app(info: dict[str, str]) -> FastAPI:
     app.add_middleware(logger_middleware.LoggingMiddleware)
     app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Cambia esto por dominios específicos en producción
+    allow_origins=[CONFIG.CLIENT_URL],  # Cambia esto por dominios específicos en producción
     allow_credentials=True,
     allow_methods=["*"],  # Permite todos los métodos (GET, POST, OPTIONS, etc.)
     allow_headers=["*"],  # Permite todos los headers
@@ -43,6 +44,23 @@ def create_app(info: dict[str, str]) -> FastAPI:
         response = await call_next(request)
         if hasattr(request.state, "background_tasks"):
             print(f"Tareas en segundo plano registradas: {request.state.background_tasks.tasks}")
+        return response
+
+    @app.middleware("http")
+    async def add_cache_control_header(request: Request, call_next):
+        response = await call_next(request)
+
+        exclude_paths: set[str] = {"/docs", "/redoc", "/openapi.json"}
+
+        if request.method == "GET":
+            if request.url.path not in exclude_paths:
+                response.headers.setdefault("Cache-Control", "public, max-age=120")
+
+        elif request.method in {"POST", "PATCH", "DELETE"}:
+            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+            response.headers["Pragma"] = "no-cache"
+            response.headers["Expires"] = "0"
+
         return response
 
     #Rutas

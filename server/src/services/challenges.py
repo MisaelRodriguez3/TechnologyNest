@@ -69,7 +69,6 @@ def get_all_challenges_by_topic(
             model=Challenge,
             page=page,
             filters=[Challenge.topic_id == topic_id],
-            joins=[Topic]
         )
         
         # Verificar si hay resultados

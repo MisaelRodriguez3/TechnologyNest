@@ -1,0 +1,111 @@
+/* NoDataPage.module.css */
+.container {
+    padding: 20px;
+    min-height: 100vh;
+    background-color: var(--deep-space);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .noDataCard {
+    background: rgba(45, 49, 66, 0.9);
+    border: 1px solid var(--quantum-gray);
+    border-radius: 12px;
+    padding: 3rem 4rem;
+    text-align: center;
+    max-width: 600px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+  }
+  
+  .title {
+    color: var(--neon-cyan);
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 15px rgba(0, 245, 212, 0.4);
+    animation: glitch 1s infinite;
+    animation-timing-function: steps(2, end);
+  }
+  
+  .message {
+    color: var(--silver-surfer);
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+  }
+  
+  .button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 1.1rem;
+  }
+  
+  .primaryButton {
+    background: linear-gradient(
+      135deg, 
+      var(--cyber-blue) 0%, 
+      var(--neon-cyan) 100%
+    );
+    color: var(--pure-white);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .primaryButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 245, 212, 0.4);
+  }
+  
+  .primaryButton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    transition: left 0.6s;
+  }
+  
+  .primaryButton:hover::after {
+    left: 100%;
+  }
+  
+  /* Efectos de animación */
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+  }
+  
+  
+  @media (max-width: 768px) {
+    .noDataCard {
+      padding: 2rem;
+      margin: 1rem;
+    }
+    
+    .title {
+      font-size: 2rem;
+    }
+    
+    .message {
+      font-size: 1rem;
+    }
+  }

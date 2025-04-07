@@ -2,8 +2,8 @@ import { UUID } from "crypto";
 
 export interface Common {
     id: UUID;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface Author {
@@ -19,4 +19,12 @@ export interface TopicInfo {
 export interface Paginated {
     page: number;
     total_pages: number;
+}
+
+export interface Data {
+    topic: { id: UUID };
+    title: string;
+    description: string;
+    code?: string; // Propiedad opcional
+    difficulty?: 'Fácil' | 'Medio' | 'Alto' | 'Extremo'
 }

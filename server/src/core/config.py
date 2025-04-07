@@ -11,8 +11,8 @@ class Config(BaseModel):
     TOKEN_EXPIRES_IN_MINUTES: int = config("TOKEN_EXPIRES_IN_MINUTES", cast=int)
     ALGORITHM: str = config("ALGORITHM", default="HS256")
     CIPHER_KEY: str = config("CIPHER_KEY")
-    CLIENT_URL: str = config("CLIENT_URL", default="http://localhost:5173")
-    ENVIROMENT: str = config("ENVIROMENT")
+    CLIENT_URL: str = config("CLIENT_URL", default="https://localhost:5173")
+    ENVIRONMENT: str = config("ENVIRONMENT")
 
     #API's Externas
     RECAPTCHA_SECRET_KEY: str = config("RECAPTCHA_SECRET_KEY")

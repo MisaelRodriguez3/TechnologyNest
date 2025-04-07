@@ -25,7 +25,7 @@ function TextArea<T extends Record<string, unknown>>({
             />
             {(watch && maxLength) &&             
             <div className="character-counter">
-                {String(value).length || 0}/{maxLength}
+                {String(value ?? '').length || 0}/{maxLength}
             </div>
             }
             <div className={`${styles.errorContainer} ${error ? styles.active : ""}`}>

@@ -32,6 +32,7 @@ class User(Base, table=True):
     challenges: list['Challenge'] = Relationship(back_populates='author')
     examples: list['Example'] = Relationship(back_populates='author')
     posts: list['Post'] = Relationship(back_populates='author')
+    comments: list['Comment'] = Relationship(back_populates='author')
 
 @event.listens_for(User, "before_insert")
 def hash_password_on_insert(mapper, connection, target: User):
@@ -58,6 +59,7 @@ def encrypt_totp_secret(mapper, connection, target: User):
 
 @event.listens_for(User, "before_insert")
 def encrypt_email_on_insert(mapper, connection, target: User):
+    """Encripta el correo del usuario mediante la función pgp_sym_encrypt de PostgreSQL."""
     print(target)
     target.email = connection.execute(
             func.PGP_SYM_ENCRYPT(target.email, CONFIG.CIPHER_KEY)
@@ -65,6 +67,7 @@ def encrypt_email_on_insert(mapper, connection, target: User):
 
 @event.listens_for(User, "before_update")
 def encrypt_email_on_update(mapper, connection, target: User):
+    """Encripta el correo del usuario si se actualiza mediante la función pgp_sym_encrypt de PostgreSQL."""
     insp = inspect(target)
     if insp.attrs.email.history.has_changes():
         target.email = connection.execute(

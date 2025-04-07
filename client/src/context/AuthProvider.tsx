@@ -33,15 +33,31 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
 
   const checkAuth = useCallback(async () => {
     const token = localStorage.getItem('token');
-    if (!token) {
+    const tokenTimestamp = localStorage.getItem('tokenTimestamp')
+    if (!token || !tokenTimestamp) {
+      setLoading(false);
+      clearData()
+      return;
+    }
+
+    const tokenAge = Date.now() - parseInt(tokenTimestamp)
+    if (tokenAge > 24 * 60 * 60 * 1000) {
+      clearData()
       setLoading(false);
       return;
     }
   
     try {
-      const { data } = await userProfileRequest();
-      setUser(data);
-      if (['/login', '/register'].includes(location.pathname)) {
+      const _user = localStorage.getItem('user')
+      if(_user) {
+        setUser(JSON.parse(_user))
+      } else {
+        const { data } = await userProfileRequest();
+        setUser(data);
+        localStorage.setItem('user', JSON.stringify(data))
+      }
+      
+      if (user && ['/login', '/register'].includes(location.pathname)) {
         navigate('/');
       }
     } catch (err) {
@@ -80,8 +96,10 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
       }
 
       localStorage.setItem('token', data.access_token);
+      localStorage.setItem('tokenTimestamp', Date.now().toString())
       const userResponse = await userProfileRequest();
       setUser(userResponse.data);
+      localStorage.setItem('user', JSON.stringify(userResponse.data))
       setSuccess('Inicio de sesión exitoso');
       navigate("/");
     } catch (err) {
@@ -128,6 +146,7 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
       const { data } = await verifyTOTP({ username, totp_code: code });
       
       localStorage.setItem('token', data.access_token);
+      localStorage.setItem('tokenTimestamp', Date.now().toString())
       const userResponse = await userProfileRequest();
       setUser(userResponse.data);
       setSuccess('Autenticación en dos pasos verificada');
@@ -141,11 +160,15 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
     }
   }, [navigate]);
 
+  const clearData = useCallback(() => {
+    localStorage.clear()
+    setUser(null)
+  }, [])
+
   const logout = useCallback(() => {
-    localStorage.removeItem('token');
-    setUser(null);
+    clearData()
     setSuccess('Sesión cerrada correctamente');
-    navigate('/login');
+    navigate('/');
   }, [navigate]);
 
   const value = useMemo(() => ({

@@ -42,6 +42,7 @@ def get_all_comments_by_post(
             .limit(pagination_data["page_size"])
         ).all()
         
+        print(comments[0].author)
         # Convertir a modelo de salida
         comments_out = [CommentOut.model_validate(c) for c in comments]
         

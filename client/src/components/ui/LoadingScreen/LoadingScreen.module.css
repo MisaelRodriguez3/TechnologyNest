@@ -1,41 +1,45 @@
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(10, 17, 40, 0.95);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
-  }
-  
-  .spinnerContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .spinner {
-    width: 60px;
-    height: 60px;
-    border: 4px solid var(--quantum-gray);
-    border-top: 4px solid var(--neon-cyan);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    box-shadow: 0 0 15px rgba(0, 245, 212, 0.3);
-  }
-  
-  .loadingText {
-    color: var(--silver-surfer);
-    margin-top: 1.5rem;
-    font-size: 1.2rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
+  position: absolute; /* Cambiado de fixed a absolute */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 17, 40, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  min-height: 100px; /* Altura mínima para mantener legibilidad */
+}
+
+.spinnerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  max-width: 90%; /* Asegura que no toque bordes en pantallas pequeñas */
+}
+
+.spinner {
+  width: min(60px, 15vw); /* Tamaño responsive (máx 60px, mínimo 15% del ancho de vista) */
+  height: min(60px, 15vw);
+  border: 4px solid var(--quantum-gray);
+  border-top: 4px solid var(--neon-cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 15px rgba(0, 245, 212, 0.3);
+}
+
+.loadingText {
+  color: var(--silver-surfer);
+  margin-top: 1.5rem;
+  font-size: clamp(0.9rem, 3vw, 1.2rem); /* Tamaño de texto responsive */
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+}
   
   @keyframes spin {
     0% {

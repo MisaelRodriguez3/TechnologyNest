@@ -1,4 +1,4 @@
-import { ImageCarousel } from "../../modules/carrusel/carrusel";
+import { ImageCarousel } from "../../modules/Carrusel/carrusel";
 import { CommentSection } from "../../modules/comment/comment";
 import { PostCard } from "../../modules/tarjeta/tarjeta";
 

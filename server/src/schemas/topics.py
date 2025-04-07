@@ -1,6 +1,8 @@
-from uuid import UUID
 from pydantic import Field, BaseModel
 from .common import BaseOut
+from .challenges import ChallengeOut
+from .posts import PostOut
+from .examples import ExampleOut
 
 class TopicBase(BaseModel):
     name: str = Field(min_length=1, max_length=50)
@@ -40,3 +42,10 @@ class TopicOut(BaseOut, TopicBase):
                 "updated_at": "2025-02-03 14:23:45.678901+00:00"
             }
         }
+
+class PaginatedContentByTopic(BaseModel):
+    total_pages: int = Field(ge=1)
+    page: int = Field(ge=1)
+    posts: list[PostOut]
+    examples: list[ExampleOut]
+    challenges: list[ChallengeOut]

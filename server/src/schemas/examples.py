@@ -1,6 +1,6 @@
+from uuid import UUID
 from pydantic import BaseModel, Field
 from .common import BaseOut, Author, TopicInfo
-from uuid import UUID
 
 class ExampleBase(BaseModel):
     """Clase base para el esquema de `ejemplos`."""

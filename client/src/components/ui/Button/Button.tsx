@@ -11,7 +11,7 @@ interface ButtonProps {
 function Button({action, fn, content, content_loading, loading}: Readonly<ButtonProps>) {
     return (
         <button 
-            type={action == "delete" ? "button" : "submit"} 
+            type={action === "delete" ? "button" : "submit"} 
             {...(fn ? { onClick: fn } : {})}
             className={`${styles.button} ${styles[action]}`}
             {...(loading ? {disabled:true} : {})}
@@ -21,4 +21,4 @@ function Button({action, fn, content, content_loading, loading}: Readonly<Button
     )
 }
 
-export default Button
+export default Button;
