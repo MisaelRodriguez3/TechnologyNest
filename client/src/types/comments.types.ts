@@ -1,12 +1,14 @@
-import { CreateCommentFormData } from "../schemas/comment.schema";
+import { UUID } from "crypto";
+import { ApiResponse } from "./api.types";
+import { Common, Author } from "./common.types";
 
-export interface Comment extends CreateCommentFormData {
-    id: string;
-    created_at: string;
-    updated_at: string;
+export interface Comment extends Common {
+    comment: string;
+    author: Author
+    post_id: UUID
 }
 
-export interface CommentFormProps {
-    post_id: string;
-    user_id: string;
-}
+export type GetCommentsResponse = ApiResponse<Comment[]>;
+export type CreateCommentResponse = ApiResponse<string>;
+export type UpdateCommentResponse = ApiResponse<string>;
+export type DeleteCommentResponse = ApiResponse<string>;

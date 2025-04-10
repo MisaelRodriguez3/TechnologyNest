@@ -2,7 +2,9 @@ import { UUID } from "crypto";
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../../../context/AuthProvider";
+import { useSectionBack } from "../../../../hooks/useBackSections";
 import { Post } from "../../../../types/posts.types";
+import Comments from "../../../comment/comment";
 import CodeBlock from "../../../../components/ui/CodeBlock/CodeBlock";
 import { getOnePostRequest, deletePostRequest } from "../../../../services/posts.service";
 import Button from "../../../../components/ui/Button/Button";
@@ -12,7 +14,6 @@ import UpdatePostForm from "../UpdatePostForm/UpdatePostForm copy";
 import LoadingScreen from "../../../../components/ui/LoadingScreen/LoadingScreen";
 import formattedDate from "../../../../utils/formattedDate";
 import styles from './DetailPost.module.css';
-import { useSectionBack } from "../../../../hooks/useBackSections";
 
 function DetailPost() {
     const {user} = useAuth();
@@ -123,6 +124,9 @@ function DetailPost() {
                         />
                     </div>
                 )}
+            </div>
+            <div>
+                <Comments postId={id as UUID}/>
             </div>
         </div>
     )

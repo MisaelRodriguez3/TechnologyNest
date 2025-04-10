@@ -12,8 +12,10 @@ import LoadingScreen from "../../../../components/ui/LoadingScreen/LoadingScreen
 import formattedDate from "../../../../utils/formattedDate";
 import styles from './DetailExample.module.css'
 import { useSectionBack } from "../../../../hooks/useBackSections";
+import { useAuth } from "../../../../context/AuthProvider";
 
 function DetailExample() {
+    const {user} = useAuth();
     const {id} = useParams<{id: UUID}>();
     const navigate = useNavigate();
 
@@ -77,20 +79,23 @@ function DetailExample() {
             {error && <ErrorNotification message={error}/>}
 
             <div className={styles.header}>
-                <div className={styles.actions}>
-                    <UpdateExampleForm 
-                        onSuccess={() => id && fetchExample(id)} 
-                        prevData={example as Example} // Asegurar que se pasa prevData
-                        id={id as UUID}
-                    />
-                    <Button
-                        action="delete"
-                        fn={deleteExample}
-                        content="Eliminar"
-                        content_loading="Eliminando..."
-                        loading={loading}
-                    />
-                </div>
+                {user ? user.id === example?.author.id && 
+                    <div className={styles.actions}>
+                        <UpdateExampleForm 
+                            onSuccess={() => id && fetchExample(id)} 
+                            prevData={example} // Asegurar que se pasa prevData
+                            id={id as UUID}
+                        />
+                        <Button
+                            action="delete"
+                            fn={deleteExample}
+                            content="Eliminar"
+                            content_loading="Eliminando..."
+                            loading={loading}
+                        />
+                    </div> : null
+                }
+
                 
                 <div className={styles.meta}>
                     <h1 className={styles.title}>{example?.title}</h1>

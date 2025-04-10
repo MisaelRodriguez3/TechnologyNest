@@ -1,5 +1,5 @@
 import { ImageCarousel } from "../../modules/Carrusel/carrusel";
-import { CommentSection } from "../../modules/comment/comment";
+//import { CommentSection } from "../../modules/comment/comment";
 import { PostCard } from "../../modules/tarjeta/tarjeta";
 
 function Random2() {
@@ -13,7 +13,7 @@ function Random2() {
     content="Participa en nuestras discusiones comunitarias"
     />
 
-    <CommentSection />
+    {/*<CommentSection />*/}
     </>
     )
 }

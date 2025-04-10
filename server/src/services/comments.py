@@ -6,51 +6,35 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from src.utils.exceptions import ConflictError, ServerError, NotFound, BadRequest
 from src.libs.logger import logger
 from src.models.comments import Comment
-from src.models.posts import Post
 from src.schemas.comments import CommentIn, CommentOut, CommentUpdate, PaginatedComments
-from src.helpers.db_helpers import pagination
+from src.schemas.common import Author
 
 def get_all_comments_by_post(
     _session: Session,
     post_id: UUID,
-    page: int
-) -> PaginatedComments | str:
+) -> list[CommentOut]:
     """Obtiene comentarios paginados por tema usando el helper de paginación"""
     try:
-        # Obtener datos de paginación
-        pagination_data = pagination(
-            session=_session,
-            model=Comment,
-            page=page,
-            filters=[Comment.post_id == post_id],
-            joins=[Post]
-        )
-        
-        # Verificar si hay resultados
-        if pagination_data["total_items"] == 0:
-            # Validar existencia del tema
-            if not _session.get(Post, post_id):
-                raise BadRequest()
-            return "Sin comentarios para este tema"
-        
-        # Obtener resultados paginados
+    
         comments = _session.exec(
             select(Comment)
             .where(Comment.post_id == post_id)
             .order_by(desc(Comment.created_at))
-            .offset(pagination_data["offset"])
-            .limit(pagination_data["page_size"])
         ).all()
         
-        print(comments[0].author)
         # Convertir a modelo de salida
-        comments_out = [CommentOut.model_validate(c) for c in comments]
+        comments_out = []
+        for comment in comments:
+            comments_out.append(CommentOut(
+                **comment.model_dump(),
+                author= Author(
+                    id=comment.author.id,
+                    username=comment.author.username
+                )
+            ))
         
-        return PaginatedComments(
-            total_pages=pagination_data["total_pages"],
-            page=pagination_data["page"],
-            comments=comments_out
-        )
+
+        return comments_out
         
     except SQLAlchemyError as e:
         logger.error(f"Error en base de datos: {str(e)}")

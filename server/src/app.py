@@ -54,7 +54,7 @@ def create_app(info: dict[str, str]) -> FastAPI:
 
         if request.method == "GET":
             if request.url.path not in exclude_paths:
-                response.headers.setdefault("Cache-Control", "public, max-age=120")
+                response.headers.setdefault("Cache-Control", "public, max-age=60")
 
         elif request.method in {"POST", "PATCH", "DELETE"}:
             response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
