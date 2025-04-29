@@ -13,7 +13,7 @@ from src.services.challenges import (
 from src.schemas.challenges import ChallengeIn, ChallengeUpdate, ChallengeOut, PaginatedChallenges
 from src.utils.exceptions import GET_RESPONSES, POST_RESPONSES, PUT_RESPONSES, DELETE_RESPONSES
 from src.utils.response import ApiResponse
-from .dependencies.dependencies import get_current_active_account
+from .dependencies.dependencies import get_current_active_account, is_author
 
 router = APIRouter(prefix="/challenges", tags=["Challenges"])
 
@@ -42,13 +42,13 @@ async def create(data: ChallengeIn, session: Session = Depends(get_session), cur
     return ApiResponse(data=response)
 
 @router.patch("/{id}", response_model=ApiResponse[str], responses=PUT_RESPONSES)
-async def update(id: UUID, data: ChallengeUpdate, session: Session = Depends(get_session), _ = Depends(get_current_active_account)):
+async def update(id: UUID, data: ChallengeUpdate, session: Session = Depends(get_session), _ = Depends(is_author('challenges'))):
     response = update_challenge(session, id, data)
 
     return ApiResponse(data=response)
 
 @router.delete("/{id}", response_model=ApiResponse[str], responses=DELETE_RESPONSES)
-async def delete(id: UUID, session: Session = Depends(get_session), _ = Depends(get_current_active_account)):
+async def delete(id: UUID, session: Session = Depends(get_session), _ = Depends(is_author('challenges'))):
     response = delete_challenge(session, id)
 
     return ApiResponse(data=response)

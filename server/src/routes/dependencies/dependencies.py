@@ -1,12 +1,12 @@
+from typing import Literal
 from uuid import UUID
-from fastapi import Depends, APIRouter
+from fastapi import Depends, APIRouter, Path
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import func
 from sqlmodel import Session, select
 import jwt
 from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 from src.models.users import User
-from src.schemas.auth import TokenData
 from src.core.config import CONFIG
 from src.core.database import get_session
 from src.core.security import verify_password, ALGORITHM
@@ -94,19 +94,10 @@ async def get_current_active_account(current_user: User = Depends(get_current_ac
         raise UnauthorizedError()
     return current_user
 
-async def is_author(author_id: UUID, current_user: User = Depends(get_current_active_account)):
-    """Verifica que el usuario sea el autor de la entrada
-    
-    Args:
-        author_id (uuid.UUID): Identificador único del usuario (autor)
-        current_user (User, optional): Información del usuario actual. Defaults to Depends(get_current_active_account).
-    
-    Raises:
-        ForbiddenError: EL usuario no es es autor
-    
-    Returns:
-        bool: Retorna True si es usuario es al autor
-    """    
-    if current_user.id != author_id:
-        raise ForbiddenError()
-    return True
+def is_author(section: Literal['posts', 'challenges', 'examples', 'comments']):
+    async def dependency(id: UUID = Path(), current_user: User = Depends(get_current_active_account)):
+        _is_author = next((item for item in getattr(current_user, section) if item.id == id), None)
+        if not _is_author:
+            raise ForbiddenError()
+        return True
+    return dependency

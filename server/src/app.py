@@ -34,10 +34,10 @@ def create_app(info: dict[str, str]) -> FastAPI:
     app.add_middleware(logger_middleware.LoggingMiddleware)
     app.add_middleware(
     CORSMiddleware,
-    allow_origins=[CONFIG.CLIENT_URL],  # Cambia esto por dominios específicos en producción
+    allow_origins=[CONFIG.CLIENT_URL],  
     allow_credentials=True,
-    allow_methods=["*"],  # Permite todos los métodos (GET, POST, OPTIONS, etc.)
-    allow_headers=["*"],  # Permite todos los headers
+    allow_methods=["*"],  
+    allow_headers=["*"],  
 )
     @app.middleware("http")
     async def log_background_tasks(request: Request, call_next):

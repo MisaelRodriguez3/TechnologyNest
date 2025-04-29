@@ -6,7 +6,7 @@ from src.services.posts import get_all_posts, get_all_posts_by_topic, get_one_po
 from src.schemas.posts import PostIn, PostUpdate, PostOut, PaginatedPosts
 from src.utils.exceptions import GET_RESPONSES, POST_RESPONSES, PUT_RESPONSES, DELETE_RESPONSES
 from src.utils.response import ApiResponse
-from .dependencies.dependencies import get_current_active_account
+from .dependencies.dependencies import get_current_active_account, is_author
 
 router = APIRouter(prefix="/posts", tags=["Posts"])
 
@@ -33,13 +33,14 @@ async def create(data: PostIn, session: Session = Depends(get_session), current_
     return ApiResponse(data=response)
 
 @router.patch("/{id}", response_model=ApiResponse[str], responses=PUT_RESPONSES)
-async def update(id: UUID, data: PostUpdate, session: Session = Depends(get_session), _ = Depends(get_current_active_account)):
+async def update(id: UUID, data: PostUpdate, session: Session = Depends(get_session), _ = Depends(is_author('posts'))):
+    print(data)
     response = update_post(session, id, data)
 
     return ApiResponse(data=response)
 
 @router.delete("/{id}", response_model=ApiResponse[str], responses=DELETE_RESPONSES)
-async def delete(id: UUID, session: Session = Depends(get_session), _ = Depends(get_current_active_account)):
+async def delete(id: UUID, session: Session = Depends(get_session), _ = Depends(is_author('posts'))):
     response = delete_post(session, id)
 
     return ApiResponse(data=response)

@@ -6,7 +6,7 @@ from src.services.examples import get_all_examples, get_all_examples_by_topic, g
 from src.schemas.examples import ExampleIn, ExampleUpdate, ExampleOut, PaginatedExamples
 from src.utils.exceptions import GET_RESPONSES, POST_RESPONSES, PUT_RESPONSES, DELETE_RESPONSES
 from src.utils.response import ApiResponse
-from .dependencies.dependencies import get_current_active_account
+from .dependencies.dependencies import get_current_active_account, is_author
 
 router = APIRouter(prefix="/examples", tags=["Examples"])
 
@@ -33,13 +33,13 @@ async def create(data: ExampleIn, session: Session = Depends(get_session), curre
     return ApiResponse(data=response)
 
 @router.patch("/{id}", response_model=ApiResponse[str], responses=PUT_RESPONSES)
-async def update(id: UUID, data: ExampleUpdate, session: Session = Depends(get_session), _ = Depends(get_current_active_account)):
+async def update(id: UUID, data: ExampleUpdate, session: Session = Depends(get_session), _ = Depends(is_author('examples'))):
     response = update_example(session, id, data)
 
     return ApiResponse(data=response)
 
 @router.delete("/{id}", response_model=ApiResponse[str], responses=DELETE_RESPONSES)
-async def delete(id: UUID, session: Session = Depends(get_session), _ = Depends(get_current_active_account)):
+async def delete(id: UUID, session: Session = Depends(get_session), _ = Depends(is_author('examples'))):
     response = delete_example(session, id)
 
     return ApiResponse(data=response)
